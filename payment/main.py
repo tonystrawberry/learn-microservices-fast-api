@@ -35,6 +35,25 @@ class Order(HashModel):
         database = redis
 
 
+@app.get("/orders/")
+def get():
+    return [format(pk) for pk in Order.all_pks()]
+
+
+def format(pk: str):
+    order = Order.get(pk)
+
+    return {
+        "id": order.pk,
+        "product_id": order.product_id,
+        "price": order.price,
+        "fee": order.fee,
+        "quantity": order.quantity,
+        "total": order.total,
+        "status": order.status,
+    }
+
+
 @app.get("/orders/{pk}")
 def get(pk: str):
     order = Order.get(pk)
